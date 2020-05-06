@@ -1,39 +1,39 @@
 <?php
-/**
- * Copyright (c) 2020. AlessandroDESIGN - Tecnologias.
- * Como Usar:
- *
- * $table = new CreateTable(
- *         [
- *             'id' => 'table',
- *             'class' => 'table table-hover'
- *         ],
- *         'div',
- *         ['class' => 'table-responsive']
- *     );
- *
- *     echo $table
- *         ->header(['ID', 'NOME', 'AÇÃO'])
- *         ->body([
- *             [1, 'ALEX'],
- *             [2, 'BIIA']
- *         ], [
- *             [
- *                 'tag' => 'a',
- *                 'value' => ['tag' => 'i', 'value' => 'editar', 'attr' => ['class' => 'fas fa-edit']],
- *                 'attr' => ['class' => 'btn btn-success', 'href' => 'editar']
- *             ],
- *             [
- *                 'tag' => 'a',
- *                 'value' => ['tag' => 'i', 'value' => 'delete', 'attr' => ['class' => 'fas fa-times']],
- *                 'attr' => ['class' => 'btn btn-danger delete', 'href' => 'delete']
- *             ]
- *         ])
- *         ->footer(['ID', 'NOME', 'AÇÃO'])
- *         ->render();
- */
-
-namespace Alessandrodesign\Formandtablecreator;
+    /**
+     * Copyright (c) 2020. AlessandroDESIGN - Tecnologias.
+     * Como Usar:
+     *
+     * $table = new CreateTable(
+     *         [
+     *             'id' => 'table',
+     *             'class' => 'table table-hover'
+     *         ],
+     *         'div',
+     *         ['class' => 'table-responsive']
+     *     );
+     *
+     *     echo $table
+     *         ->header(['ID', 'NOME', 'AÇÃO'])
+     *         ->body([
+     *             [1, 'ALEX'],
+     *             [2, 'BIIA']
+     *         ], [
+     *             [
+     *                 'tag' => 'a',
+     *                 'value' => ['tag' => 'i', 'value' => 'editar', 'attr' => ['class' => 'fas fa-edit']],
+     *                 'attr' => ['class' => 'btn btn-success', 'href' => 'editar']
+     *             ],
+     *             [
+     *                 'tag' => 'a',
+     *                 'value' => ['tag' => 'i', 'value' => 'delete', 'attr' => ['class' => 'fas fa-times']],
+     *                 'attr' => ['class' => 'btn btn-danger delete', 'href' => 'delete']
+     *             ]
+     *         ])
+     *         ->footer(['ID', 'NOME', 'AÇÃO'])
+     *         ->render();
+     */
+    
+    namespace Source\Core;
     
     use DOMDocument;
     use DOMElement;
@@ -110,16 +110,19 @@ namespace Alessandrodesign\Formandtablecreator;
             $tbody = $this->dom->createElement('tbody');
             foreach ($columns as $item) {
                 $tr = $this->dom->createElement('tr');
-                foreach ($item as $value) {
-                    $td = $this->dom->createElement('td', $value);
-                    $tr->appendChild($td);
-                }
-                if (!is_null($buttons)) {
-                    $td = $this->dom->createElement('td');
-                    foreach ($buttons as $button) {
-                        $btn = $this->createButton($button);
-                        $td->appendChild($btn);
+                foreach ($item as $key => $value) {
+                    if (is_numeric($key)) {
+                        $td = $this->dom->createElement('td', $value);
                         $tr->appendChild($td);
+                    } else {
+                        if (!is_null($buttons)) {
+                            $td = $this->dom->createElement('td');
+                            foreach ($buttons as $button) {
+                                $btn = $this->createButton($button, $key, $value);
+                                $td->appendChild($btn);
+                                $tr->appendChild($td);
+                            }
+                        }
                     }
                 }
                 $tbody->appendChild($tr);
@@ -131,9 +134,11 @@ namespace Alessandrodesign\Formandtablecreator;
         
         /**
          * @param array $button
+         * @param string|null $find
+         * @param string|null $item
          * @return DOMNode
          */
-        private function createButton(array $button): DOMNode
+        private function createButton(array $button, string $find = null, string $item = null): DOMNode
         {
             $btn = (object)$button;
             if (isset($btn->value) && is_array($btn->value)) {
@@ -141,7 +146,7 @@ namespace Alessandrodesign\Formandtablecreator;
                 $child = $this->createButton($btn->value);
                 $tag->appendChild($child);
             } else {
-                $tag = $this->dom->createElement($btn->tag, $btn->value ?? null);
+                $tag = $this->dom->createElement($btn->tag, str_replace($find, $item, $btn->value) ?? null);
             }
             
             foreach ($btn->attr as $attr => $value) {
