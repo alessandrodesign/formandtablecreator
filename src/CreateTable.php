@@ -33,7 +33,7 @@
      *         ->render();
      */
     
-    namespace Source\Core;
+    namespace Alessandrodesign\Formandtablecreator;
     
     use DOMDocument;
     use DOMElement;
