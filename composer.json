@@ -1,0 +1,32 @@
+{
+  "name": "alessandrodesign/formandtablecreator",
+  "description": "Form and table creator",
+  "keywords": [
+    "form creator",
+    "table creator",
+    "alessandrodesign",
+    "PHP",
+    "form",
+    "table",
+    "creator",
+    "dynamic"
+  ],
+  "homepage": "http://www.alessandrodesign.com.br",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alessandro P. Souza",
+      "email": "eu@alessandrodesign.com.br",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^7.3",
+    "ext-dom": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Alessandrodesign\\Formandtablecreator\\": "src"
+    }
+  }
+}
