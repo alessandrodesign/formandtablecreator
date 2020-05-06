@@ -146,12 +146,16 @@
                 $child = $this->createButton($btn->value);
                 $tag->appendChild($child);
             } else {
-                $tag = $this->dom->createElement($btn->tag, str_replace($find, $item, $btn->value) ?? null);
+                $tag = $this->dom->createElement($btn->tag, $btn->value ?? null);
             }
             
             foreach ($btn->attr as $attr => $value) {
                 $attribute = $this->dom->createAttribute($attr);
-                $attribute->value = $value;
+                if ($attr === 'href') {
+                    $attribute->value = str_replace($find, $item, $value);
+                } else {
+                    $attribute->value = $value;
+                }
                 $tag->appendChild($attribute);
             }
             return $tag;
